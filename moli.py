@@ -5,8 +5,8 @@ import requests
 def get_reply(message):
     payload = {'question': message,
                'limit': 6,
-               'Api_Key': '40103ccd595f5151a664c8db2fc54aa2',
-               'Api_Secret': 'zg9tykwdaj5y'
+               'Api_Key': '',
+               'Api_Secret': ''
                }
 
     url = 'http://i.itpk.cn/api.php'
