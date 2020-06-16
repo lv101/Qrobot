@@ -1,7 +1,6 @@
 # from pprint import pprint
 # import nonebot
 # from cqhttp import CQHttp
-
 import requests
 
 data = {
