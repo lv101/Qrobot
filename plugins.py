@@ -12,7 +12,7 @@ def echo(context, arg):
 @command('chp')
 def chp(context, arg):
     r = requests.get('https://chp.shadiao.app/api.php')
-    return {'reply': r.text}
+    return {'reply': r.text, 'at_sender': False}
 
 @command('jisuan')
 def jisuan(context, arg):
