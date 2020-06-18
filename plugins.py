@@ -82,9 +82,9 @@ def tianqi7(context, arg):
         for x in data['index']:
             desc_list.append(x['desc'])
         desc = desc_list[random.randint(0, len(desc_list) - 1)]
-        reply_msg(context['message_type'], f"\n{text['country']}{text['city']}\n"f"更新时间：{text['update_time']}\n"
+        reply_msg(context['message_type'], f"{text['country']}{text['city']}\n"f"更新时间：{text['update_time']}\n"
                   f"{data['day']}\n"f"天气情况：{data['wea']}\n平均温度：{data['tem']}\n{desc}",
-                  group_id=context['group_id'], user_id=['user_id'])
+                  group_id=context['group_id'], user_id=context['user_id'])
         time.sleep(1)
 
 @command('ask')
@@ -103,15 +103,21 @@ def ask(context, arg):
 
 @command('help')
 def help(context, arg):
-    reply = "\n        帮助菜单\n" \
+    reply = "        帮助菜单\n" \
             "\t/echo -> 复读机\n" \
             "\t/ask -> 推衍\n" \
             "\t/chp -> 彩虹屁\n" \
             "\t/jisuan -> 计算器\n" \
             "\t/fanyi -> 有道翻译\n" \
             "\t/tianqi -> 天气预报\n" \
-            "\t/tianqi -> 未来7天天气\n" \
-            "我的源码放在https://github.com/lv101/Qrobot\n" \
-            "一起来探索吧~"
+            "\t/tianqi -> 未来7天天气"
 
-    return {'reply': reply}
+    if context['message_type'] == 'private':
+        msg = reply
+        context['group_id'] = None
+    elif context['message_type'] == 'group':
+        msg = f"[CQ:at,qq={context['user_id']}]\n"+reply
+    else:
+        msg = ''
+    reply_msg(context['message_type'], msg, group_id=context['group_id'], user_id=context['user_id'])
+    reply_msg(context['message_type'], "我的源码放在https://github.com/lv101/Qrobot\n尽情探索吧~", group_id=context['group_id'], user_id=context['user_id'])
