@@ -1,6 +1,3 @@
-'''
-向指定id的用户或群组发送消息
-'''
 import requests
 
 def reply_msg(type_, message, user_id=296491216, group_id=660322651):
@@ -9,9 +6,11 @@ def reply_msg(type_, message, user_id=296491216, group_id=660322651):
         "message": message,
         "auto_escape": False
     }
-    if type_ == 'private':
+    if not message:
+        return ''
+    if type_ == 'private' and user_id:
         data["user_id"] = user_id
-    elif type_ == 'group':
+    elif type_ == 'group' and group_id:
         data["group_id"] = group_id
     else:
         return ''
