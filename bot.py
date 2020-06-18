@@ -1,5 +1,5 @@
 import moli
-# from clock import judge_0
+from clock import judge_0
 import tuling
 import plugins
 import threading
@@ -9,8 +9,8 @@ from cqhttp import CQHttp
 # config中 "post_url": "http://127.0.0.1:5701"
 
 bot = CQHttp(api_root='http://127.0.0.1:5700',
-             access_token="L",
-             secret="2333"
+             access_token="",
+             secret=""
              )
 
 def handle_all_message(context):
@@ -63,7 +63,7 @@ def handle_message(context):
         else:
             return {'reply': replies[0]}
 
-# t1 = threading.Thread(target=judge_0)
-# t1.start()
+t1 = threading.Thread(target=judge_0)
+t1.start()
 
 bot.run(host='127.0.0.1', port=5701, debug=True)
