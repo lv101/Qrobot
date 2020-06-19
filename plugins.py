@@ -67,8 +67,8 @@ def tianqi(context, arg):
 
     paylod = {
         'version': 'v6',
-        'appid': 84981977,
-        'appsecret': '99mRbV1v',
+        'appid': ,
+        'appsecret': '',
         'city': city
     }
 
@@ -100,8 +100,8 @@ def tianqi7(context, arg):
 
     paylod = {
               'version': 'v1',
-              'appid': 84981977,
-              'appsecret': '99mRbV1v',
+              'appid': ,
+              'appsecret': '',
               'city': city
                   }
 
