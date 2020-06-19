@@ -5,7 +5,7 @@ import requests
 
 def reply_msg(type_, message, user_id=296491216, group_id=660322651):
     data = {
-        "access_token": "L",
+        "access_token": "L",  # 你的配置文件中access_token, 没有可不填
         "message": message,
         "auto_escape": False
     }
