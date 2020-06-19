@@ -15,7 +15,7 @@ def reply_msg(type_, message, user_id=296491216, group_id=660322651):
         data["user_id"] = user_id
     elif type_ == 'group' and group_id:
         data["group_id"] = group_id
-        data["message"] = f"[CQ:at,qq=user_id']\n" + data["message"]
+        data["message"] = f"[CQ:at,qq={user_id}']\n" + data["message"]
     else:
         return ''
     api_url = f'http://127.0.0.1:5700/send_{type_}_msg'
