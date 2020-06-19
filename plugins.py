@@ -6,9 +6,11 @@ import random
 import re
 import time
 import requests
+import threading
 from math import *
-from replys import reply_msg
+from bdy import main
 from commands import command
+from replys import reply_msg, check_id
 
 @command('echo')
 def echo(context, arg):
@@ -48,28 +50,59 @@ def fanyi(context, arg):
 
 @command('tianqi')
 def tianqi(context, arg):
-    paylod = {'version': 'v6',
-              'appid': 84981977,
-              'appsecret': '99mRbV1v',
-              'city': arg
-              }
+    with open('city.json', 'r', encoding='unicode-escape') as f:
+        citys = json.loads(f.read())
+    city = None
+    for city_ in citys:
+        if re.findall(city_['cityZh'], arg):
+            city = city_['cityZh']
+            print(city)
+            break
+    check_id(context)
+    if not city:
+        time.sleep(3)
+        reply_msg(context['message_type'], "啊哦,没有查到该地的信息,换个城市试试吧 >_<",
+                  group_id=context['group_id'], user_id=context['user_id'])
+        return ''
+
+    paylod = {
+        'version': 'v6',
+        'appid': 84981977,
+        'appsecret': '99mRbV1v',
+        'city': city
+    }
 
     url = 'https://tianqiapi.com/api'
     r = requests.get(url, params=paylod).content.decode('unicode-escape').replace('<\/em><em>', '')
-
     data = json.loads(r)
 
-    return {'reply': f"\n{data['country']}{data['city']}\n更新时间：{data['update_time']}\n"
-                     f"天气情况：{data['wea']}\n实时温度：{data['tem']}\n气压：{data['pressure']}hPa\n"
-                     f"空气质量：{data['air']}\n"f"空气质量等级：{data['air_level']}\n{data['air_tips']}"}
+    reply_msg(context['message_type'], f"{data['country']}{data['city']}\n更新时间：{data['update_time']}\n"
+              f"天气情况：{data['wea']}\n实时温度：{data['tem']}\n气压：{data['pressure']}hPa\n"
+              f"空气质量：{data['air']}\n"f"空气质量等级：{data['air_level']}\n{data['air_tips']}",
+              group_id=context['group_id'], user_id=context['user_id'])
 
 @command('tianqi7')
 def tianqi7(context, arg):
+    with open('city.json', 'r', encoding='unicode-escape') as f:
+        datas = json.loads(f.read())
+    city = None
+    for data in datas:
+        if re.findall(data['cityZh'], arg):
+            city = data['cityZh']
+            print(city)
+    check_id(context)
+
+    if not city:
+        time.sleep(3)
+        reply_msg(context['message_type'], "啊哦,没有查到该地的信息,换个城市试试吧 >_<",
+                  group_id=context['group_id'], user_id=context['user_id'])
+        return ''
+
     paylod = {
               'version': 'v1',
               'appid': 84981977,
               'appsecret': '99mRbV1v',
-              'city': arg
+              'city': city
                   }
 
     url = 'https://tianqiapi.com/api'
@@ -82,6 +115,7 @@ def tianqi7(context, arg):
         for x in data['index']:
             desc_list.append(x['desc'])
         desc = desc_list[random.randint(0, len(desc_list) - 1)]
+        check_id(context)
         reply_msg(context['message_type'], f"{text['country']}{text['city']}\n"f"更新时间：{text['update_time']}\n"
                   f"{data['day']}\n"f"天气情况：{data['wea']}\n平均温度：{data['tem']}\n{desc}",
                   group_id=context['group_id'], user_id=context['user_id'])
@@ -112,12 +146,6 @@ def help(context, arg):
             "\t/tianqi -> 天气预报\n" \
             "\t/tianqi -> 未来7天天气"
 
-    if context['message_type'] == 'private':
-        msg = reply
-        context['group_id'] = None
-    elif context['message_type'] == 'group':
-        msg = f"[CQ:at,qq={context['user_id']}]\n"+reply
-    else:
-        msg = ''
-    reply_msg(context['message_type'], msg, group_id=context['group_id'], user_id=context['user_id'])
+    check_id(context)
+    reply_msg(context['message_type'], reply, group_id=context['group_id'], user_id=context['user_id'])
     reply_msg(context['message_type'], "我的源码放在https://github.com/lv101/Qrobot\n尽情探索吧~", group_id=context['group_id'], user_id=context['user_id'])
