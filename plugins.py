@@ -37,16 +37,24 @@ def fanyi(context, arg):
 
     paylod = {'doctype': 'json',
               'type': 'AUTO',
-              'i': arg}
+              'i': args}
     url = 'http://fanyi.youdao.com/translate'
-    r = requests.get(url, params=paylod)
-    type_ = re.findall(r'"type":(.*?),', r.text)[0]
-    error = re.findall(r'"errorCode":(.*?),', r.text)[0]
-    text = re.findall(r'"tgt":"(.*?)"', r.text)[0]
-    if eval(type_) == "UNSUPPORTED":
+    data = requests.get(url, params=paylod).json()
+
+    type_ = data["type"]
+    error = data["errorCode"]
+    results = data["translateResult"]
+    if type_ == "UNSUPPORTED":
         return {'reply': "这个词好深奥,人家不会呢,换个词试试吧 >_<"}
     else:
-        return {'reply': text}
+        trans = []
+        for result in results:
+            text = result[0]["tgt"]
+            if text:
+                trans.append(text)
+        result_info = '\n'.join(trans)
+        return {'reply': result_info}
+
 
 @command('tianqi')
 def tianqi(context, arg):
