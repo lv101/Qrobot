@@ -152,7 +152,7 @@ def help(context, arg):
             "\t/jisuan -> 计算器\n" \
             "\t/fanyi -> 有道翻译\n" \
             "\t/tianqi -> 天气预报\n" \
-            "\t/tianqi -> 未来7天天气"
+            "\t/tianqi7 -> 未来7天天气"
 
     check_id(context)
     reply_msg(context['message_type'], reply, group_id=context['group_id'], user_id=context['user_id'])
